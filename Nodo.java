@@ -60,12 +60,46 @@ public class Nodo {
             String retorno;
             retorno = "(";
             if (aux != null) {
-                    retorno += "C" + aux.valor; 
+                retorno += "C" + aux.valor; 
                 retorno += imprimir(aux.esquerda);
                 retorno += imprimir(aux.direita);
             }
             retorno += ")";
             return retorno;
+        }
+        
+        public boolean remove(int value, Nodo parent) {
+            if (value < this.valor) {
+                if (esquerda != null) {
+                    return esquerda.remove(value, this);
+                } else {
+                    return false;
+                }
+            } else if (value > this.valor) {
+                if (direita != null) {
+                    return direita.remove(value, this);
+                } else {
+                    return false;
+                }
+            } else {
+                if (esquerda != null && direita != null) {
+                    this.valor = direita.menorValor();
+                    direita.remove(this.valor, this);
+                } else if (parent.esquerda == this) {
+                    parent.esquerda = (esquerda != null) ? esquerda : direita;
+                } else if (parent.direita == this) {
+                    parent.direita = (esquerda != null) ? esquerda : direita;
+                }
+                return true;
+            }
+        }
+        
+        public int menorValor() {
+            if (esquerda == null) {
+                return valor;
+            } else {
+                return esquerda.menorValor();
+            }
         }
 	
 }
